@@ -7,15 +7,8 @@ const otpCodes = new Map();
 
 const otpController = {
   // Issue OTP
-  GetOTP: asyncHandler(async (req, res) => {
+  SendOTP: asyncHandler(async (req, res) => {
     const { email } = req.body;
-
-    // Check email is already exists
-//     const client = await Client.findOne({ email });
-//     console.log("Client is already is in backend", client);
-//     if (!client) {
-//       throw new Error("Account does not exist");
-//     }
 
     // Generate 6-digit recovery code
     const code = Math.floor(100000 + Math.random() * 900000).toString();
@@ -25,23 +18,45 @@ const otpController = {
 
     otpCodes.set(email, { code, expires });
 
-//     // Send OTP to email  - > Call Notification Service
-//     const mailOptions = {
-//       from: process.env.SMTP_USER,
-//       to: email,
-//       subject: "MOG: Your Password Recovery Code",
-//       text: `Your password recovery code for MOG game is: ${code}. It will expire in 15 minutes.`,
-//     };
+    // Send OTP to email  - > Call Notification Service
+    try {
+      await fetch("http://localhost:8000/api/send-email", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+            to: email,
+            subject: "Tuition Payment Verification – Your OTP Code",
+            text: `Your OTP for verifying tuition payment is: ${code}. It will expire in 5 minutes.\n
+                Please confirm your identity by entering this 6-digit code to verify your tuition payment.
+                Just a heads up: this code will expire in 5 minutes for security reasons.`,
+            html: `
+            <div style="font-family: Arial, sans-serif; text-align: center; padding: 10px; color: #333;">
+                <h2 style="margin-bottom: 10px; color: #2c3e50;">Your OTP Code is</h2>
 
-//     try {
-//       await transporter.sendMail(mailOptions);
-//       res.json({
-//         message: "Recovery code sent to your email",
-//       });
-//     } catch (error) {
-//       console.error("Error sending recovery email:", error);
-//       res.status(500).json({ message: "Failed to send recovery code email." });
-//     }
+                <div style="font-size: 32px; font-weight: bold; color: #000000ff; margin: 10px 0;">
+                ${code}
+                </div>
+
+                <p style="font-size: 14px; line-height: 1.6; max-width: 500px; margin: 0 auto 5px auto; text-align: center; color: #555;">
+                Please confirm your identity by entering this 6-digit code to verify your tuition payment. 
+                Just a heads up: this code will expire in 5 minutes for security reasons.
+                </p>
+
+                <img src="https://i.pinimg.com/1200x/60/f6/88/60f688dc00c4ec0b6e312c71eb16ed2d.jpg" 
+                    alt="Tuition Payment" 
+                    style="max-width: 100%; height: auto;" />
+            </div>
+            `,
+        }),
+      })  
+
+      res.json({
+        message: "OTP code sent to your email",
+      });
+    } catch (error) {
+      console.error("Error calling Notification Service:", error.message);
+      res.status(500).json({ message: "Failed to send OTP to email." });
+    }
   }),
 
   // Verify OTP
@@ -78,3 +93,5 @@ const otpController = {
     res.json({ message: "OTP verified" });
   }),
 }
+
+module.exports = otpController;
