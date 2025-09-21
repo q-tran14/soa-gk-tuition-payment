@@ -32,11 +32,11 @@ const notificationController = {
         try {
             await transporter.sendMail(mailOptions);
             res.json({
-                message: "OTP code sent to your email. Please check your email.",
+                message: "Notification sent to your email. Please check your email.",
             });
         } catch (error) {
             console.error("Error sending recovery email:", error);
-            res.status(500).json({ message: "Failed to send OTP code to your email." });
+            res.status(500).json({ message: "Failed to send notification to your email." });
         }
     }),
 }

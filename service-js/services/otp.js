@@ -64,33 +64,41 @@ const otpController = {
     const { email, code } = req.body;
 
     if (!email || !code) {
-      res.status(400);
-      throw new Error("Email and recovery code are required");
+        return res.status(400).json({
+            success: false,
+            error: { code: "MISSING_FIELDS", message: "Email and recovery code are required." }
+        });
     }
 
     const record = otpCodes.get(email);
     if (!record) {
-      res.status(400);
-      throw new Error("No OTP found for this email");
+        // Option: for security, you can return same message as INVALID_OTP
+        return res.status(404).json({
+            success: false,
+            error: { code: "OTP_NOT_FOUND", message: "No OTP found for this email." }
+        });
     }
 
     if (record.expires < Date.now()) {
-      otpCodes.delete(email);
-      res.status(400);
-      throw new Error("OTP has expired");
+        otpCodes.delete(email);
+        return res.status(410).json({
+            success: false,
+            error: { code: "OTP_EXPIRED", message: "OTP has expired." }
+        });
     }
 
     // const isMatch = await bcrypt.compare();
 
     if (record.code !== code) {
-      res.status(400);
-      throw new Error("Invalid OTP");
+        return res.status(401).json({
+            success: false,
+            error: { code: "INVALID_OTP", message: "Invalid OTP." }
+        });
     }
 
     // If code is valid, delete it to prevent reuse
     otpCodes.delete(email);
-
-    res.json({ message: "OTP verified" });
+    return res.status(200).json({ success: true, message: "OTP verified" });
   }),
 }
 
