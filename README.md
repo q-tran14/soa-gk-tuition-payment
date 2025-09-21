@@ -22,19 +22,20 @@ Repo for SOA Midterm Project - Tuition Payment
 - **Description:** Generate a 6-digit OTP code and send it to the user's email. The OTP expires after 5 minutes.
 
 - **Request Body (JSON):**
-  ```json
+```json
   {
     "email": "student@example.com"
   }
-
+```
 ### Respone 200 OK
-    ```json
+```json
     {
         "message": "OTP code sent to your email. Please check your email."
     }
-
+```
 ### Respone 500 ERROR
-    ```json
+```json
     {
         "message": "Failed to send OTP code to your email."
     }
+```
