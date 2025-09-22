@@ -1,36 +1,130 @@
 <!DOCTYPE html>
 <html lang="en">
-    <head>
-        <meta charset="UTF-8">
-        <meta http-equiv="X-UA-Compatible" content="IE=edge">
-        <meta name="viewport" content="width=device-width, initial-scale=1.0">
-        <link rel="stylesheet" href="style.css">
-        <link href='https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css' rel='stylesheet'>
-        <title>Login Page</title>
-    </head>
-    <body>
-        <div class="wrapper">
-            <form action="">
-                <h1>Login</h1>
-                <div class="input-box">
-                    <input type="text" placeholder="Username" required>
-                    <i class='bx bxs-user'></i>
-                </div>
-                <div class="input-box">
-                    <input type="password" placeholder="Password" required>
-                    <i class='bx bxs-lock-alt' ></i>
-                </div>
-                <div class="remember-forgot">
-                    <label> <input type="checkbox"> Remember me</label>
-                    <a href="#">Forgot password?</a>
-                </div>
-                <button type="submit" class="btn">Login</button>
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Tuition - Sign In</title>
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600&display=swap" rel="stylesheet">
+  <style>
+    body {
+        margin: 0;
+        font-family: 'Poppins', sans-serif;
+        background: linear-gradient(120deg, #2980b9, #6dd5fa);
+        height: 100vh;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+    }
 
-                <div class="register-link">
-                    <p>Don't have an account? 
-                    <a href="#">Register</a></p>
-                </div>
-            </form>
+    .container {
+        width: 900px;
+        background: #fff;
+        border-radius: 12px;
+        box-shadow: 0 8px 20px rgba(0,0,0,0.2);
+        display: flex;
+        overflow: hidden;
+    }
+
+    .left {
+        flex: 2;
+        background: url('https://static.vecteezy.com/system/resources/previews/009/734/240/non_2x/design-of-students-take-money-in-trophy-outstanding-students-receive-scholarship-support-for-tuition-fees-illustration-for-landing-page-website-poster-mobile-apps-web-social-media-brochure-ads-etc-free-vector.jpg') no-repeat center/cover;
+    }
+
+    .right {
+        flex: 1;
+        padding: 40px;
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+    }
+
+    h2 {
+        text-align: center;
+        margin-bottom: 20px;
+        color: #2c3e50;
+    }
+
+    input {
+        width: 100%;
+        padding: 12px;
+        margin: 8px 16px 8px -8px;
+        border-radius: 8px;
+        border: 1px solid #ccc;
+        font-size: 14px;
+    }
+
+    button {
+        display: block;
+        width: 200px;         /* cố định chiều rộng */
+        padding: 12px;
+        margin: 15px auto 0;  /* căn giữa theo chiều ngang */
+        border: none;
+        border-radius: 8px;
+        background: #2980b9;
+        color: #fff;
+        font-size: 16px;
+        font-weight: 600;
+        cursor: pointer;
+        transition: 0.3s;
+    }   
+
+    .login-form {
+        width: 300px;     /* ví dụ khung form cố định */
+        margin: 0 auto;   /* căn giữa màn hình */
+    }
+
+    button:hover {
+        background: #1f5d85;
+    }
+
+    .toggle {
+        text-align: center;
+        margin-top: 15px;
+        font-size: 14px;
+    }
+
+    .toggle a {
+        color: #2980b9;
+        cursor: pointer;
+        font-weight: 600;
+    }
+
+    .hidden {
+        display: none;
+    }
+    .form-wrapper {
+        display: flex;
+        justify-content: center; /* căn ngang */
+        align-items: center;     /* căn dọc (nếu muốn) */
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <div class="left"></div>
+    <div class="right">
+      
+      <!-- LOGIN FORM -->
+        <div class="form-wrapper">
+            <div id="loginForm">
+                <h2>Tuition Payment System</h2>
+                <input type="text" id="loginUsername" placeholder="Email">
+                <input type="password" id="loginPassword" placeholder="Password">
+                <button onclick="login()">Login</button>
+            </div>
         </div>
-    </body>
+      
+      <!-- REGISTER FORM -->
+      <div id="registerForm" class="hidden">
+        <h2>Register</h2>
+        <input type="text" id="regUsername" placeholder="Username">
+        <input type="email" id="regEmail" placeholder="Email">
+        <input type="password" id="regPassword" placeholder="Password">
+        <button onclick="register()">Register</button>
+        <div class="toggle">Already have an account? <a onclick="showLogin()">Login</a></div>
+      </div>
+
+    </div>
+  </div>
+</body>
 </html>
