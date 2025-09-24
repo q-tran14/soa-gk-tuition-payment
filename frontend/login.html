@@ -128,3 +128,52 @@
   </div>
 </body>
 </html>
+
+<script>
+    async function login() {
+        const email = document.getElementById("loginUsername").value;
+        const password = document.getElementById("loginPassword").value;
+
+        if (!email || !password) {
+            alert("Please enter email and password");
+            return;
+        }
+
+        // Regex cơ bản cho email
+        const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+
+        if (!emailRegex.test(email)) {
+            alert("Please enter a valid email address");
+            return;
+        }
+
+        try {
+        const res = await fetch("http://localhost:8000/api/customers/login", {
+            method: "POST",
+            headers: {
+            "Content-Type": "application/json",
+            },
+            body: JSON.stringify({ email, password }),
+        });
+
+        const data = await res.json();
+
+        if (!res.ok) {
+            alert(data.message || "Login failed");
+            return;
+        }
+
+        // Lưu JWT và customer vào localStorage để dùng cho các API sau
+        localStorage.setItem("token", data.token);
+        localStorage.setItem("customer", JSON.stringify(data.customer));
+
+        // alert("Login success!");
+
+        // Redirect qua form đóng tiền học phí
+        window.location.href = "tuition-form.html";
+        } catch (err) {
+            console.error(err);
+            alert("Something went wrong");
+        }
+    }
+</script>

@@ -9,7 +9,7 @@ const customerController = {
         const { fullName, phone, email, password } = req.body;
 
         if (!fullName || !phone || !email || !password) {
-        return res.status(400).json({ message: "Missing required fields" });
+            return res.status(400).json({ message: "Missing required fields" });
         }
 
         const hashedPassword = await bcrypt.hash(password, 10);
@@ -23,15 +23,15 @@ const customerController = {
     Login: asyncHandler(async (req, res) => {
         const { email, password } = req.body;
         const customer = await Customer.findByEmail(email);
-        if (!customer) return res.status(401).json({ message: "Invalid email" });
+        if (!customer) return res.status(404).json({ message: "Email not exist" });
 
         const isMatch = await bcrypt.compare(password, customer.password);
-        if (!isMatch) return res.status(401).json({ message: "Invalid password" });
+        if (!isMatch) return res.status(401).json({ message: "Invalid email or password" });
 
         const token = jwt.sign(
-        { id: customer.id, email: customer.email },
-        process.env.JWT_SECRET,
-        { expiresIn: "1h" }
+            { id: customer.id, email: customer.email },
+            process.env.JWT_SECRET,
+            { expiresIn: "1h" }
         );
 
         res.json({ message: "Login success", token, customer });
