@@ -12,6 +12,15 @@ CREATE TABLE Customer (
     CustomerBalance DECIMAL(12,2) DEFAULT 0
 );
 go
+CREATE TABLE Student (
+    StudentID INT IDENTITY(1,1) PRIMARY KEY,
+    StudentFullName NVARCHAR(100) NOT NULL,
+    StudentEmail VARCHAR(255) NOT NULL UNIQUE,
+    StudentPhone VARCHAR(20) NULL,
+    StudentTuitionCode VARCHAR(50)  UNIQUE
+  );
 
 SELECT * FROM Customer;
+go
+SELECT * FROM Student;
 go

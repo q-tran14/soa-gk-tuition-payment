@@ -9,6 +9,7 @@ if (process.env.DB_USER && process.env.DB_PASSWORD) {
     user: process.env.DB_USER,
     password: process.env.DB_PASSWORD,
     database: process.env.DB_NAME,
+    port: parseInt(process.env.DB_PORT, 10),
     options: {
       encrypt: false,
       trustServerCertificate: true,
@@ -39,5 +40,11 @@ const connectDB = async () => {
     throw err;
   }
 };
+// ✅ Thêm hàm này để các model dùng thống nhất
+let poolPromise = null;
+async function getPool() {
+  if (!poolPromise) poolPromise = connectDB();
+  return poolPromise;
+}
 
 module.exports = { sql, pool, connectDB };
